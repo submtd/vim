@@ -1,5 +1,3 @@
-set nocompatible
-
 " vim-plug auto install
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
@@ -7,73 +5,96 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+" install plugins
 call plug#begin()
-    Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install --no-dev -o'}
-    Plug 'ncm2/ncm2'
-    Plug 'roxma/nvim-yarp'
-    Plug 'phpactor/ncm2-phpactor'
-    Plug 'elythyr/phpactor-mappings'
+
+    " NERDTree
+    Plug 'scrooloose/nerdtree'
+
+    " git integration
     Plug 'tpope/vim-fugitive'
-    Plug 'kien/ctrlp.vim'
+    Plug 'airblade/vim-gitgutter'
+
+    " linting
+    Plug 'w0rp/ale'
+
+    " PHP specific integration
+    Plug 'phpactor/phpactor', {'do': 'composer install', 'for': 'php'}
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'kristijanhusak/deoplete-phpactor'
+
+    " Debugger
+    Plug 'vim-vdebug/vdebug'
+    
+    " Snippets
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+
+    " Comments
+    Plug 'tpope/vim-commentary'
+
+    " Search
+    Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
+
+    " Syntax
+    Plug 'sheerun/vim-polyglot'
+    Plug 'matthewbdaly/vim-filetype-settings'
+
+    " Themes
+    Plug 'kaicataldo/material.vim'
+    Plug 'itchyny/lightline.vim'
+
+    " Editorconfig
+    Plug 'editorconfig/editorconfig-vim'
+
 call plug#end()
 
-" basic settings
-" syntax highlighting
-syntax enable
-filetype plugin on
-" netrw fuzzy search sorta
-set path+=**
+"Completion with Deoplete
+let g:deoplete#enable_at_startup = 1
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" general settings
+syntax on
+set nu
+filetype plugin indent on
+set nocp
+set ruler
 set wildmenu
-" make tabs 4 spaces
-set shiftwidth=4
-set tabstop=4
-set expandtab
-" enable mouse support
+set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set mouse=a
 
-" netrw file browsing tweaks
-let g:netrw_banner=0        " disable annoying banner
-let g:netrw_liststyle=3     " tree view
-let g:netrw_list_hide=netrw_gitignore#Hide()
-let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
-let g:netrw_winsize=35
-let g:NetrwIsOpen=0
-function! ToggleNetrw()
-    if g:NetrwIsOpen
-        let i = bufnr("$")
-        while (i >= 1)
-            if (getbufvar(i, "&filetype") == "netrw")
-                silent exe "bwipeout " . i 
-            endif
-            let i-=1
-        endwhile
-        let g:NetrwIsOpen=0
-    else
-        let g:NetrwIsOpen=1
-        silent Lexplore
-    endif
-endfunction
-noremap <silent> <c-b> :call ToggleNetrw()<CR>
-noremap <c-n> :bn<CR>
-noremap <c-w> :bd<CR>
+" theme settings
+set t_Co=256
+if (has('termguicolors'))
+  set termguicolors
+endif
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'default'
+let g:lightline = { 'colorscheme': 'material_vim' }
+colorscheme material
+set noshowmode
 
-" auto completion
-autocmd BufEnter * call ncm2#enable_for_buffer()
-set completeopt=noinsert,menuone,noselect
-set shortmess+=c
-inoremap <c-c> <ESC>
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-au User Ncm2Plugin call ncm2#register_source({
-    \ 'name' : 'css',
-    \ 'priority': 9,
-    \ 'subscope_enable': 1,
-    \ 'scope': ['css','scss'],
-    \ 'mark': 'css',
-    \ 'word_pattern': '[\w\-]+',
-    \ 'complete_pattern': ':\s*',
-    \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
-    \ })
+" code folding
+set foldmethod=manual
 
+"Tabs and spacing
+set autoindent
+set cindent
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set smarttab
 
+"Search
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set diffopt +=iwhite
+
+"Use FZF for search
+nnoremap <C-p> :FZF<Cr>
+let g:fzf_tags_command = 'ctags'
+
+"Open quickfix window after running git grep
+autocmd QuickFixCmdPost *grep* cwindow
