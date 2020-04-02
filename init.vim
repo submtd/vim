@@ -9,6 +9,10 @@ endif
 
 call plug#begin()
     Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install --no-dev -o'}
+    Plug 'ncm2/ncm2'
+    Plug 'roxma/nvim-yarp'
+    Plug 'phpactor/ncm2-phpactor'
+    Plug 'elythyr/phpactor-mappings'
 call plug#end()
 
 " basic settings
@@ -44,5 +48,24 @@ function! ToggleNetrw()
     endif
 endfunction
 noremap <silent> <c-b> :call ToggleNetrw()<CR>
+
+" auto completion
+autocmd BufEnter * call ncm2#enable_for_buffer()
+set completeopt=noinsert,menuone,noselect
+set shortmess+=c
+inoremap <c-c> <ESC>
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+au User Ncm2Plugin call ncm2#register_source({
+    \ 'name' : 'css',
+    \ 'priority': 9,
+    \ 'subscope_enable': 1,
+    \ 'scope': ['css','scss'],
+    \ 'mark': 'css',
+    \ 'word_pattern': '[\w\-]+',
+    \ 'complete_pattern': ':\s*',
+    \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+    \ })
 
 
