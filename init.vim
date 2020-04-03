@@ -18,6 +18,10 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     " php cs fixer
     Plug 'stephpy/vim-php-cs-fixer'
+    " better php syntax
+    Plug 'StanAngeloff/php.vim'
+    " git
+    Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 " theme settings
@@ -76,6 +80,7 @@ let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 autocmd FileType netrw set nolist
 autocmd FileType netrw set signcolumn=no
 autocmd FileType netrw set nonumber
+autocmd FileType netrw set norelativenumber
 let g:NetrwIsOpen=0
 function! ToggleNetrw()
     if g:NetrwIsOpen
@@ -92,7 +97,7 @@ function! ToggleNetrw()
         silent Lexplore
     endif
 endfunction
-noremap <silent><C-b> :call ToggleNetrw()<CR>
+noremap <silent><leader>e :call ToggleNetrw()<CR>
 
 " php cs fixer
 let g:php_cs_fixer_rules = '@PSR2'
