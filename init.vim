@@ -7,13 +7,14 @@ endif
 
 " plugins
 call plug#begin('~/.config/nvim/plugged')
+    " nerdtree
+    Plug 'scrooloose/nerdtree'
     " sensible defaults
     Plug 'tpope/vim-sensible'
     " theme
     Plug 'kaicataldo/material.vim'
     " airline
     Plug 'vim-airline/vim-airline'
-    "Plug 'vim-airline/vim-airline-themes'
     " coc
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     " php cs fixer
@@ -70,40 +71,27 @@ let mapleader = ','
 set path+=**
 set wildmenu
 
-" netrw
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 25
-let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
-autocmd FileType netrw set nolist
-autocmd FileType netrw set signcolumn=no
-autocmd FileType netrw set nonumber
-autocmd FileType netrw set norelativenumber
-let g:NetrwIsOpen=0
-function! ToggleNetrw()
-    if g:NetrwIsOpen
-        let i = bufnr("$")
-        while (i >= 1)
-            if (getbufvar(i, "&filetype") == "netrw")
-                silent exe "bwipeout " . i 
-            endif
-            let i-=1
-        endwhile
-        let g:NetrwIsOpen=0
-    else
-        let g:NetrwIsOpen=1
-        silent Lexplore
-    endif
-endfunction
-noremap <silent><leader>e :call ToggleNetrw()<CR>
+" nerdtree
+nnoremap <silent><leader>e :NERDTreeToggle<CR>
 
 " php cs fixer
 let g:php_cs_fixer_rules = '@PSR2'
 let g:php_cs_fixer_config_file = '~/.config/nvim/php_cs'
 let g:php_cs_fixer_verbose = 1
 autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
+
+" toggle diagnostic window
+let g:DiagIsOpen=0
+function! ToggleDiag()
+    if g:DiagIsOpen
+        let g:DiagIsOpen=0
+        silent lclose
+    else
+        let g:DiagIsOpen=1
+        silent lopen
+    endif
+endfunction
+noremap <silent><leader>d :call ToggleDiag()<CR>
 
 " coc
 " TextEdit might fail if hidden is not set.
