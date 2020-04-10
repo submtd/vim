@@ -12,7 +12,7 @@ call plug#begin('~/.config/nvim/plugged')
     " sensible defaults
     Plug 'tpope/vim-sensible'
     " theme
-    Plug 'kaicataldo/material.vim'
+    Plug 'morhetz/gruvbox'
     " airline
     Plug 'vim-airline/vim-airline'
     " coc
@@ -34,11 +34,14 @@ if (has('termguicolors'))
   set termguicolors
 endif
 set background=dark
-let g:material_theme_style='default'
-let g:material_terminal_italics = 1
-let g:airline_theme = 'material'
+let g:gruvbox_bold = 1
+let g:gruvbox_italic = 1
+let g:gruvbox_termcolors = 256
+let g:gruvbox_improved_strings = 1
+let g:gruvbox_improved_warnings = 1
+let g:airline_theme = 'gruvbox'
 let g:airline_powerline_fonts = 1
-colorscheme material
+colorscheme gruvbox
 
 " general settings
 filetype plugin indent on
@@ -94,6 +97,8 @@ endfunction
 noremap <silent><leader>d :call ToggleDiag()<CR>
 
 " coc
+" extensions
+let g:coc_global_extensions = ['coc-phpls', 'coc-json', 'coc-css', 'coc-html', 'coc-vetur', 'coc-tsserver', 'coc-git', 'coc-yaml']
 " TextEdit might fail if hidden is not set.
 set hidden
 " Some servers have issues with backup files, see #649.
