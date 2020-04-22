@@ -1,3 +1,4 @@
 autoload
 .netrwhist
 plugged
+php_cs.cache

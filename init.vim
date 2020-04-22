@@ -83,6 +83,7 @@ nnoremap <silent><leader>e :NERDTreeToggle<CR>
 " php cs fixer
 let g:php_cs_fixer_rules = '@PSR2'
 let g:php_cs_fixer_config_file = '~/.config/nvim/php_cs'
+let g:php_cs_fixer_cache = '~/.config/nvim/php_cs.cache'
 let g:php_cs_fixer_verbose = 1
 autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
 
