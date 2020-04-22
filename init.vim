@@ -23,6 +23,9 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'StanAngeloff/php.vim'
     " git
     Plug 'airblade/vim-gitgutter'
+    " fzf
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
 call plug#end()
 
 " theme settings
@@ -83,18 +86,16 @@ let g:php_cs_fixer_config_file = '~/.config/nvim/php_cs'
 let g:php_cs_fixer_verbose = 1
 autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
 
-" toggle diagnostic window
-let g:DiagIsOpen=0
-function! ToggleDiag()
-    if g:DiagIsOpen
-        let g:DiagIsOpen=0
-        silent lclose
-    else
-        let g:DiagIsOpen=1
-        silent lopen
-    endif
-endfunction
-noremap <silent><leader>d :call ToggleDiag()<CR>
+" fzf
+let g:fzf_preview_window = ''
+let g:fzf_buffers_jump = 1
+command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --color=always --smart-case --no-ignore-vcs '.shellescape(<q-args>), 1,
+    \   <bang>0)
+nnoremap <silent> <C-p> :Files<cr>
+nnoremap <silent> <C-b> :Buffers<cr>
+nnoremap <silent> <C-r> :Rg<cr>
 
 " coc
 " extensions
