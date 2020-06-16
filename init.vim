@@ -213,3 +213,31 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+" Term Toggle
+let s:term_buf = 0
+let s:term_win = 0
+
+function! TermToggle(height)
+    if win_gotoid(s:term_win)
+        hide
+    else
+        new terminal
+        exec "resize ".a:height
+        try
+            exec "buffer ".s:term_buf
+            exec "bd terminal"
+        catch
+            call termopen($SHELL, {"detach": 0})
+            let s:term_buf = bufnr("")
+            setlocal nonu nornu scl=no nocul
+        endtry
+        startinsert!
+        let s:term_win = win_getid()
+    endif
+endfunction
+
+nnoremap <silent><leader>t :call TermToggle(12)<CR>
+inoremap <silent><leader>t <Esc>:call TermToggle(12)<CR>
+tnoremap <silent><leader>t <C-\><C-n>:call TermToggle(12)<CR>
+
