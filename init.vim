@@ -100,7 +100,7 @@ nnoremap <silent> <C-r> :Rg<cr>
 
 " coc
 " extensions
-let g:coc_global_extensions = ['coc-phpls', 'coc-json', 'coc-css', 'coc-html', 'coc-vetur', 'coc-tsserver', 'coc-git', 'coc-yaml', 'coc-vutur']
+let g:coc_global_extensions = ['coc-phpls', 'coc-json', 'coc-css', 'coc-html', 'coc-vetur', 'coc-tsserver', 'coc-git', 'coc-yaml', 'coc-vetur']
 " TextEdit might fail if hidden is not set.
 set hidden
 " Some servers have issues with backup files, see #649.
